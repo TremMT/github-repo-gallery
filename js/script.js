@@ -2,7 +2,7 @@ const myProfile = document.querySelector(".overview");
 // ^ Where your profile information will appear.
 const username = "TremMT";
 // ^ GitHub username.
-const repoList = document.querySelector("repo-list");
+const repoList = document.querySelector(".repo-list");
 // ^ Unordered repos list
 
 const gHInformation = async function () {
