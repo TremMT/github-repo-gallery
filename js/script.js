@@ -2,11 +2,15 @@ const myProfile = document.querySelector(".overview");
 // ^ Where your profile information will appear.
 const username = "TremMT";
 // ^ GitHub username.
+const repoList = document.querySelector("repo-list");
+// ^ Unordered repos list
+
 const gHInformation = async function () {
   const userInfo = await fetch(`https://api.github.com/users/${username}`);
   const data = await userInfo.json();
-  console.log(data);
+  //console.log(data);
   displayUserInfo(data);
+
 };
 
 gHInformation();
@@ -29,4 +33,25 @@ const displayUserInfo = function (data) {
   // ^ Inside the 5 placeholders, use the JSON data to grab the relevant properties to display on the page. = add DATA
   myProfile.append(div);
   // ^ Append the div to the overview element.
+  getRepos();
+  // ^ At the bottom of your second function which displays your GitHub user data, call the async function that fetches your repos.
+};
+
+const getRepos = async function () {
+  const repos = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+  const getRepoData = await repos.json();
+  //console.log(getRepoData);
+  displayRepos(getRepoData);
+  // ^ At the bottom of the async function fetching your repos, call the function you just created to display info about each repository. As an argument, pass the JSON response data for the repos.
+};
+
+const displayRepos = function (repos) {
+  //  Inside the function, loop and create a list item for each repo and give each item - Since you are looping through multiple objects, use the for(...of) loop - Create a loop FOR EACH REPO OF the REPOS array
+  for (const repo of repos) {
+    const eachRepo = document.createElement("li");
+    eachRepo.classList.add("repo");
+    eachRepo.innerHTML = `<h3>${repo.name}</h3>`;
+    repoList.append(eachRepo);
+// ^ Append the list item to the global variable that selects the unordered repos list.
+  };
 };
