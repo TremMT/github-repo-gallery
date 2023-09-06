@@ -4,6 +4,10 @@ const username = "TremMT";
 // ^ GitHub username.
 const repoList = document.querySelector(".repo-list");
 // ^ Unordered repos list
+const repoInfoSection = document.querySelector(".repos");
+// ^ Selects the section with a class of “repos” where all your repo information appears. 
+const indRepoData = document.querySelector(".repo-data");
+// ^ Selects the section with a class of “repo-data” where the individual repo data will appear.
 
 const gHInformation = async function () {
   const userInfo = await fetch(`https://api.github.com/users/${username}`);
@@ -53,5 +57,24 @@ const displayRepos = function (repos) {
     eachRepo.innerHTML = `<h3>${repo.name}</h3>`;
     repoList.append(eachRepo);
 // ^ Append the list item to the global variable that selects the unordered repos list.
-  };
+  }
 };
+
+repoList.addEventListener("click", function (e) {
+  if (e.target.matches("h3")); {
+  const repoName = e.target.innerText;
+  specRepoInfo(repoName);
+  }
+});
+
+const specRepoInfo = async function(repoName) {
+ const specInfo = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
+ const repoInfo = await specInfo.json();
+ console.log(repoInfo);
+
+const fetchLanguages = await fetch(repoInfo.language_url);
+const languageData = await fetchLanguages.json();
+console.log(languageData);
+};
+// ^ Still inside the async function to get specific repo information, create a variable called fetchLanguages to fetch data from language_url property of your repoInfo.
+//
