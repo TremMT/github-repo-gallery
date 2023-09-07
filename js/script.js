@@ -70,11 +70,33 @@ repoList.addEventListener("click", function (e) {
 const specRepoInfo = async function(repoName) {
  const specInfo = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
  const repoInfo = await specInfo.json();
- console.log(repoInfo);
+console.log(repoInfo);
 
-const fetchLanguages = await fetch(repoInfo.language_url);
+const fetchLanguages = await fetch(repoInfo.languages_url);
 const languageData = await fetchLanguages.json();
-console.log(languageData);
+//console.log(languageData);
+const languages = [];
+for (const language in languageData) {
+languages.push(language);
+//console.log(languages);
+}
+specRepoDisplay(repoInfo, languages);
+
 };
-// ^ Still inside the async function to get specific repo information, create a variable called fetchLanguages to fetch data from language_url property of your repoInfo.
-//
+
+
+const specRepoDisplay = function (repoInfo, languages) {
+  indRepoData.innerHTML = "";
+  indRepoData.classList.remove("hide");
+  repoInfoSection.classList.add("hide");
+  const div = document.createElement("div");
+  div.innerHTML = `
+  <h3>Name: ${repoInfo.name}</h3>
+    <p>Description: ${repoInfo.description}</p>
+    <p>Default Branch: ${repoInfo.default_branch}</p>
+    <p>Languages: ${languages.join(", ")}</p>
+    <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>
+  `
+  indRepoData.append(div);
+};
+// Append the new div element to the section with a class of “repo-data”. Unhide (show) the “repo-data” element. Hide the element with the class of “repos”.
